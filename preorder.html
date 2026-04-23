@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project HEAR | Tech Pre-Order</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Fira Code', 'Courier New', monospace;
+      background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 560px;
+      background: rgba(12, 20, 30, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 28px 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 255, 255, 0.15);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    h2 {
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffcc40, 0 0 12px #00aaff80;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 1.9rem;
+      margin-bottom: 8px;
+      border-left: 4px solid #0ff;
+      padding-left: 18px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .tech-badge {
+      font-size: 0.75rem;
+      color: #7fcdff;
+      background: #0a1a2a;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      margin-bottom: 20px;
+      margin-top: 5px;
+      letter-spacing: 0.5px;
+      border: 0.5px solid #2affbc60;
+      font-family: monospace;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 8px 0 12px 0;
+      background: #0f1722;
+      border: 1px solid #2c3e55;
+      border-radius: 14px;
+      color: #eef4ff;
+      font-size: 0.95rem;
+      font-family: 'Segoe UI', monospace;
+      transition: 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #0ff;
+      box-shadow: 0 0 8px #0ff8, 0 0 0 2px #0ff2;
+      background: #0b111c;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-top: 8px;
+      color: #b9e2ff;
+      letter-spacing: 0.3px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      font-family: 'Fira Code', monospace;
+    }
+
+    #terms {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      accent-color: #0ff;
+      transform: translateY(2px);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      margin: 20px 0 10px;
+    }
+
+    .checkbox-row label {
+      margin: 0;
+      text-transform: none;
+      font-size: 0.9rem;
+    }
+
+    button {
+      padding: 12px;
+      width: 100%;
+      margin-top: 14px;
+      border: none;
+      border-radius: 40px;
+      font-weight: bold;
+      font-size: 1rem;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      transition: 0.2s;
+      background: linear-gradient(95deg, #0ff1c0, #0a8cff);
+      color: #010b14;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px #0ff4;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 8px 20px #0ff6;
+    }
+
+    button:nth-of-type(1) {
+      background: #1e2a3e;
+      color: #bbf0ff;
+      border: 1px solid #2affb0;
+      box-shadow: none;
+    }
+
+    button:nth-of-type(1):hover {
+      background: #2a3a50;
+      color: #0ff;
+      border-color: #0ff;
+      transform: translateY(-1px);
+    }
+
+    .error {
+      color: #ff5f7c;
+      background: #ff1a4410;
+      border-left: 3px solid #ff3366;
+      padding: 10px 16px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      font-family: monospace;
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>PROJECT HEAR</h2>
+  <div class="tech-badge">HAPTIC AUDIO RECEIVER | PRE-ORDER TERMINAL</div>
+
+  <div id="errorMsg" class="error"></div>
+
+  <form onsubmit="return handleOrder()">
+    
+    <label>CUSTOMER NAME:</label>
+    <input type="text" id="name" placeholder="e.g., Juan Dela Cruz">
+
+    <label>PRODUCT VARIANT:</label>
+    <select id="variant">
+      <option value="">-- select frequency --</option>
+      <option value="Project HEAR - Core (PHP 1,825)">Project HEAR - Core (PHP 1,825)</option>
+      <option value="Project HEAR - Pro (PHP 2,500)">Project HEAR - Pro (PHP 2,500)</option>
+    </select>
+
+    <label>QUANTITY:</label>
+    <input type="number" id="quantity" placeholder="units">
+
+    <label>PICKUP PROTOCOL:</label>
+    <select id="pickup">
+      <option value="">-- select --</option>
+      <option value="Delivery">Delivery (encrypted address)</option>
+      <option value="Meetup">Meetup (neural zone)</option>
+    </select>
+
+    <label>ADDRESS (required if delivery):</label>
+    <input type="text" id="address" placeholder="street, city, postal">
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="terms">
+      <label>I accept the terms & cyber-preorder agreement</label>
+    </div>
+
+    <button type="button" onclick="loadPreviousOrder()">LOAD PREVIOUS ORDER</button>
+    <button type="submit">SUBMIT PRE-ORDER</button>
+
+  </form>
+</div>
+
+<script>
+  function setCookie(name, value, maxAge) {
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/`;
+  }
+
+  function getCookie(name) {
+    const cookies = document.cookie.split('; ');
+    for (let cookie of cookies) {
+      let [key, val] = cookie.split('=');
+      key = decodeURIComponent(key);
+      if (key === name) return decodeURIComponent(val);
+    }
+    return null;
+  }
+
+  function deleteCookie(name) {
+    document.cookie = `${encodeURIComponent(name)}=; max-age=0; path=/`;
+  }
+
+  function validateForm(name, product, quantity, pickup, address, terms) {
+    let errors = [];
+    if (!name.trim()) errors.push("Customer name cannot be empty.");
+    if (!product) errors.push("Select a product variant.");
+    if (!quantity || isNaN(quantity) || quantity <= 0) errors.push("Quantity must be greater than 0.");
+    if (!pickup) errors.push("Pickup method required.");
+    if (pickup === "Delivery" && !address.trim()) errors.push("Address required for Delivery.");
+    if (!terms) errors.push("You must accept the terms.");
+    return errors;
+  }
+
+  function handleOrder() {
+    const errorDiv = document.getElementById("errorMsg");
+    errorDiv.innerHTML = "";
+
+    const name = document.getElementById("name").value;
+    const product = document.getElementById("variant").value;
+    const quantity = document.getElementById("quantity").value;
+    const pickup = document.getElementById("pickup").value;
+    const address = document.getElementById("address").value;
+    const terms = document.getElementById("terms").checked;
+
+    const errors = validateForm(name, product, quantity, pickup, address, terms);
+    if (errors.length > 0) {
+      errorDiv.innerHTML = errors.join("<br>");
+      return false;
+    }
+
+    setCookie("customerName", name, 2592000);
+
+    localStorage.setItem("product", product);
+    localStorage.setItem("quantity", quantity);
+    localStorage.setItem("pickupMethod", pickup);
+    localStorage.setItem("address", address);
+
+    let price = 0;
+    const priceMatch = product.match(/PHP\s?([\d,]+)/);
+    if (priceMatch) {
+      price = parseFloat(priceMatch[1].replace(/,/g, ''));
+    }
+    localStorage.setItem("unitPrice", price);
+
+    window.location.href = "summary.html";
+    return false;
+  }
+
+  function loadPreviousOrder() {
+    const errorDiv = document.getElementById("errorMsg");
+    const savedName = getCookie("customerName");
+    const savedProduct = localStorage.getItem("product");
+    const savedQuantity = localStorage.getItem("quantity");
+    const savedPickup = localStorage.getItem("pickupMethod");
+    const savedAddress = localStorage.getItem("address");
+
+    if (!savedName && !savedProduct) {
+      errorDiv.innerHTML = "No previous order data found. Submit an order first.";
+      return;
+    }
+
+    if (savedName) document.getElementById("name").value = savedName;
+    if (savedProduct) document.getElementById("variant").value = savedProduct;
+    if (savedQuantity) document.getElementById("quantity").value = savedQuantity;
+    if (savedPickup) document.getElementById("pickup").value = savedPickup;
+    if (savedAddress) document.getElementById("address").value = savedAddress;
+
+    errorDiv.innerHTML = "Previous order loaded. You can edit and re-submit.";
+    setTimeout(() => {
+      if (errorDiv.innerHTML.includes("Previous order loaded")) errorDiv.innerHTML = "";
+    }, 3000);
+  }
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html>
+<head>
+  <title>Project HEAR | Tech Pre-Order</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Fira Code', 'Courier New', monospace;
+      background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 560px;
+      background: rgba(12, 20, 30, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 28px 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 255, 255, 0.15);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    h2 {
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffcc40, 0 0 12px #00aaff80;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 1.9rem;
+      margin-bottom: 8px;
+      border-left: 4px solid #0ff;
+      padding-left: 18px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .tech-badge {
+      font-size: 0.75rem;
+      color: #7fcdff;
+      background: #0a1a2a;
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      margin-bottom: 20px;
+      margin-top: 5px;
+      letter-spacing: 0.5px;
+      border: 0.5px solid #2affbc60;
+      font-family: monospace;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      margin: 8px 0 12px 0;
+      background: #0f1722;
+      border: 1px solid #2c3e55;
+      border-radius: 14px;
+      color: #eef4ff;
+      font-size: 0.95rem;
+      font-family: 'Segoe UI', monospace;
+      transition: 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #0ff;
+      box-shadow: 0 0 8px #0ff8, 0 0 0 2px #0ff2;
+      background: #0b111c;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-top: 8px;
+      color: #b9e2ff;
+      letter-spacing: 0.3px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      font-family: 'Fira Code', monospace;
+    }
+
+    #terms {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+      accent-color: #0ff;
+      transform: translateY(2px);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      margin: 20px 0 10px;
+    }
+
+    .checkbox-row label {
+      margin: 0;
+      text-transform: none;
+      font-size: 0.9rem;
+    }
+
+    button {
+      padding: 12px;
+      width: 100%;
+      margin-top: 14px;
+      border: none;
+      border-radius: 40px;
+      font-weight: bold;
+      font-size: 1rem;
+      font-family: 'Fira Code', monospace;
+      cursor: pointer;
+      transition: 0.2s;
+      background: linear-gradient(95deg, #0ff1c0, #0a8cff);
+      color: #010b14;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px #0ff4;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow: 0 8px 20px #0ff6;
+    }
+
+    button:nth-of-type(1) {
+      background: #1e2a3e;
+      color: #bbf0ff;
+      border: 1px solid #2affb0;
+      box-shadow: none;
+    }
+
+    button:nth-of-type(1):hover {
+      background: #2a3a50;
+      color: #0ff;
+      border-color: #0ff;
+      transform: translateY(-1px);
+    }
+
+    .error {
+      color: #ff5f7c;
+      background: #ff1a4410;
+      border-left: 3px solid #ff3366;
+      padding: 10px 16px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      font-family: monospace;
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>PROJECT HEAR</h2>
+  <div class="tech-badge">HAPTIC AUDIO RECEIVER | PRE-ORDER TERMINAL</div>
+
+  <div id="errorMsg" class="error"></div>
+
+  <form onsubmit="return handleOrder()">
+    
+    <label>CUSTOMER NAME:</label>
+    <input type="text" id="name" placeholder="e.g., Juan Dela Cruz">
+
+    <label>PRODUCT VARIANT:</label>
+    <select id="variant">
+      <option value="">-- select frequency --</option>
+      <option value="Project HEAR - Core (PHP 1,825)">Project HEAR - Core (PHP 1,825)</option>
+      <option value="Project HEAR - Pro (PHP 2,500)">Project HEAR - Pro (PHP 2,500)</option>
+    </select>
+
+    <label>QUANTITY:</label>
+    <input type="number" id="quantity" placeholder="units">
+
+    <label>PICKUP PROTOCOL:</label>
+    <select id="pickup">
+      <option value="">-- select --</option>
+      <option value="Delivery">Delivery (encrypted address)</option>
+      <option value="Meetup">Meetup (neural zone)</option>
+    </select>
+
+    <label>ADDRESS (required if delivery):</label>
+    <input type="text" id="address" placeholder="street, city, postal">
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="terms">
+      <label>I accept the terms & cyber-preorder agreement</label>
+    </div>
+
+    <button type="button" onclick="loadPreviousOrder()">LOAD PREVIOUS ORDER</button>
+    <button type="submit">SUBMIT PRE-ORDER</button>
+
+  </form>
+</div>
+
+<script>
+  function setCookie(name, value, maxAge) {
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; max-age=${maxAge}; path=/`;
+  }
+
+  function getCookie(name) {
+    const cookies = document.cookie.split('; ');
+    for (let cookie of cookies) {
+      let [key, val] = cookie.split('=');
+      key = decodeURIComponent(key);
+      if (key === name) return decodeURIComponent(val);
+    }
+    return null;
+  }
+
+  function deleteCookie(name) {
+    document.cookie = `${encodeURIComponent(name)}=; max-age=0; path=/`;
+  }
+
+  function validateForm(name, product, quantity, pickup, address, terms) {
+    let errors = [];
+    if (!name.trim()) errors.push("Customer name cannot be empty.");
+    if (!product) errors.push("Select a product variant.");
+    if (!quantity || isNaN(quantity) || quantity <= 0) errors.push("Quantity must be greater than 0.");
+    if (!pickup) errors.push("Pickup method required.");
+    if (pickup === "Delivery" && !address.trim()) errors.push("Address required for Delivery.");
+    if (!terms) errors.push("You must accept the terms.");
+    return errors;
+  }
+
+  function handleOrder() {
+    const errorDiv = document.getElementById("errorMsg");
+    errorDiv.innerHTML = "";
+
+    const name = document.getElementById("name").value;
+    const product = document.getElementById("variant").value;
+    const quantity = document.getElementById("quantity").value;
+    const pickup = document.getElementById("pickup").value;
+    const address = document.getElementById("address").value;
+    const terms = document.getElementById("terms").checked;
+
+    const errors = validateForm(name, product, quantity, pickup, address, terms);
+    if (errors.length > 0) {
+      errorDiv.innerHTML = errors.join("<br>");
+      return false;
+    }
+
+    setCookie("customerName", name, 2592000);
+
+    localStorage.setItem("product", product);
+    localStorage.setItem("quantity", quantity);
+    localStorage.setItem("pickupMethod", pickup);
+    localStorage.setItem("address", address);
+
+    let price = 0;
+    const priceMatch = product.match(/PHP\s?([\d,]+)/);
+    if (priceMatch) {
+      price = parseFloat(priceMatch[1].replace(/,/g, ''));
+    }
+    localStorage.setItem("unitPrice", price);
+
+    window.location.href = "summary.html";
+    return false;
+  }
+
+  function loadPreviousOrder() {
+    const errorDiv = document.getElementById("errorMsg");
+    const savedName = getCookie("customerName");
+    const savedProduct = localStorage.getItem("product");
+    const savedQuantity = localStorage.getItem("quantity");
+    const savedPickup = localStorage.getItem("pickupMethod");
+    const savedAddress = localStorage.getItem("address");
+
+    if (!savedName && !savedProduct) {
+      errorDiv.innerHTML = "No previous order data found. Submit an order first.";
+      return;
+    }
+
+    if (savedName) document.getElementById("name").value = savedName;
+    if (savedProduct) document.getElementById("variant").value = savedProduct;
+    if (savedQuantity) document.getElementById("quantity").value = savedQuantity;
+    if (savedPickup) document.getElementById("pickup").value = savedPickup;
+    if (savedAddress) document.getElementById("address").value = savedAddress;
+
+    errorDiv.innerHTML = "Previous order loaded. You can edit and re-submit.";
+    setTimeout(() => {
+      if (errorDiv.innerHTML.includes("Previous order loaded")) errorDiv.innerHTML = "";
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>

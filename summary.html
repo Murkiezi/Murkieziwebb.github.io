@@ -1,0 +1,127 @@
+v<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary | Project HEAR</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #eef2f5;
+            padding: 30px;
+            text-align: center;
+        }
+        .summary-card {
+            max-width: 550px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        h2 {
+            color: #1e466e;
+            border-bottom: 3px solid #ff9800;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .detail {
+            margin: 18px 0;
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            background: #f8f9fc;
+            border-radius: 14px;
+        }
+        .total {
+            background: #ff980020;
+            border-left: 5px solid #ff9800;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .thankyou {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 30px;
+            text-align: center;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            background: #1e466e;
+            color: white;
+            padding: 12px 28px;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-back:hover {
+            background: #0f2c48;
+        }
+    </style>
+</head>
+<body>
+
+<div class="summary-card">
+    <h2>PRE-ORDER SUMMARY</h2>
+
+    <div id="summaryContent"></div>
+
+    <div class="thankyou" id="thankyouMsg">
+        Thank you for supporting inclusive technology.
+    </div>
+    <div style="text-align: center;">
+        <a href="preorder.html" class="btn-back">Edit / New Order</a>
+    </div>
+</div>
+
+<script>
+    function getCookie(name) {
+        const cookies = document.cookie.split('; ');
+        for (let cookie of cookies) {
+            const [key, val] = cookie.split('=');
+            if (decodeURIComponent(key) === name) return decodeURIComponent(val);
+        }
+        return null;
+    }
+
+    const customerName = getCookie("customerName");
+    const product = localStorage.getItem("product");
+    const quantity = parseInt(localStorage.getItem("quantity")) || 0;
+    const pickup = localStorage.getItem("pickupMethod");
+    let address = localStorage.getItem("address");
+    const unitPrice = parseFloat(localStorage.getItem("unitPrice")) || 0;
+    const totalAmount = unitPrice * quantity;
+
+    let output = `
+        <div class="detail"><strong>Customer:</strong> ${customerName ? customerName : "Not specified"}</div>
+        <div class="detail"><strong>Product:</strong> ${product ? product : "—"}</div>
+        <div class="detail"><strong>Quantity:</strong> ${quantity}</div>
+        <div class="detail"><strong>Unit price:</strong> PHP ${unitPrice.toLocaleString()}</div>
+        <div class="detail total"><strong>Total Amount:</strong> PHP ${totalAmount.toLocaleString()}</div>
+        <div class="detail"><strong>Pickup Method:</strong> ${pickup ? pickup : "—"}</div>
+    `;
+
+    if (pickup === "Delivery" && address) {
+        output += `<div class="detail"><strong>Delivery Address:</strong> ${address}</div>`;
+    } else if (pickup === "Delivery" && !address) {
+        output += `<div class="detail"><strong>Delivery Address:</strong> (missing – please go back and add)</div>`;
+    } else if (pickup === "Meetup") {
+        output += `<div class="detail"><strong>Meetup:</strong> No address needed – we will contact you.</div>`;
+    }
+
+    if (!customerName && !product) {
+        output = `<div class="detail" style="color:#d32f2f;">No pre-order information found. Please go back and place an order.</div>`;
+        document.getElementById("thankyouMsg").style.display = "none";
+    } else if (!customerName) {
+        output += `<div class="detail" style="color:orange;">Customer name missing (cookie expired? Place order again).</div>`;
+    }
+
+    document.getElementById("summaryContent").innerHTML = output;
+</script>
+</body>
+</html>
